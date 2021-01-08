@@ -18,19 +18,21 @@ class Camera1:
 
 
 
-  def get_qr_data(self, im):
-    barcodes = decode(im)
-    for barcode in barcodes:
-        x, y , w, h = barcode.rect
-        barcode_info = barcode.data.decode('utf-8')
-        cv2.rectangle(im, (x, y),(x+w, y+h), (0, 255, 0), 2)
-        
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(im, barcode_info, (x + 6, y - 6), font, 2.0, (255, 255, 255), 1)
-        with open("barcode_result.txt", mode ='w') as file:
-            file.write("Recognized Barcode:" + barcode_info)
-    return im
- 
+  def get_qr_data(self, img):
+    output_codes = decode(img)
+    #print(output_codes)
+    
+    #print(type(output_codes))
+    #print(len(output_codes))
+    for code in output_codes:
+        print(code)
+        print('data: ', code.data)
+        print('type: ', code.type)
+        print('rect: ', code.rect)
+        print('polygon:', code.polygon)
+
+
+  
   def callback(self,data):
     try:
       cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
