@@ -50,7 +50,7 @@ class Camera1:
     (rows,cols,channels) = cv_image.shape
     
     img = cv_image
-    image = cv2.addWeighted(img, 7, np.zeros(img.shape, img.dtype), 0, 0)
+    image = cv2.addWeighted(img, 3.3, np.zeros(img.shape, img.dtype), 0, 0)
     for qr_result in decode(image):
         print(qr_result)
     mydata = qr_result.data.decode('utf-8')
