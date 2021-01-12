@@ -57,7 +57,7 @@ class Camera1:
     (rows,cols,channels) = cv_image.shape
     
     img = cv_image
-    image = cv2.addWeighted(img, 3, np.zeros(img.shape, img.dtype), 0, 0)
+    image = cv2.addWeighted(img, 4, np.zeros(img.shape, img.dtype), 0, 0)
 
     # Resize a 720x1280 image to 360x640 to fit it on the screen
     resized_image = cv2.resize(image, (720/2, 1280/2)) 
