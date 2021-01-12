@@ -16,8 +16,6 @@ class Camera1:
     self.bridge = CvBridge()
     self.image_sub = rospy.Subscriber("/eyrc/vb/camera_1/image_raw", Image,self.callback)
 
-
-
   def get_qr_data(self, img):
     #hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     #for x in range(0, len(hsv)):
@@ -38,15 +36,10 @@ class Camera1:
         #with open("barcode_result.txt", mode ='w') as file:
             #file.write("Recognized Barcode:" + barcode_info)
     	print(code)
-    	print('data: ', code.data)
+   	print('data: ', code.data)
     	print('type: ', code.type)
     	print('rect: ', code.rect)
     	print('polygon:', code.polygon)
-   
-
-    
-
-
   
   def callback(self,data):
     try:
@@ -57,7 +50,16 @@ class Camera1:
     (rows,cols,channels) = cv_image.shape
     
     img = cv_image
-    image = cv2.addWeighted(img, 4, np.zeros(img.shape, img.dtype), 0, 0)
+    image = cv2.addWeighted(img, 7, np.zeros(img.shape, img.dtype), 0, 0)
+    for qr_result in decode(image):
+        print(qr_result)
+    mydata = qr_result.data.decode('utf-8')
+    print(mydata)
+    pts = np.array([qr_result.polygon],np.int32)
+    pts = pts.reshape((-1,1,2))
+    cv2.polylines(image,[pts],True,(255,0,255),5)
+    pts2 = qr_result.rect
+    cv2.putText(image,mydata,(pts2[0],pts2[1]),cv2.FONT_HERSHEY_SIMPLEX,0.9,(255,0,255),2)
 
     # Resize a 720x1280 image to 360x640 to fit it on the screen
     resized_image = cv2.resize(image, (720/2, 1280/2)) 
@@ -66,7 +68,7 @@ class Camera1:
     
     rospy.loginfo(self.get_qr_data(image))
     
-    cv2.waitKey(3)
+    cv2.waitKey(1)
 
 
 def main(args):
